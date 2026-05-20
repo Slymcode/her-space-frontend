@@ -35,7 +35,7 @@ function JournalPage() {
     mutationFn: async () => {
       if (!user || !content.trim()) throw new Error("Write something first");
       return await journalApi.createJournalEntry({
-        title: title.trim() || null,
+        title: title.trim() || "Untitled",
         content: content.trim(),
       });
     },
@@ -91,9 +91,7 @@ function JournalPage() {
           <p className="mt-3 text-sm leading-relaxed">{orchestration.aiResponse}</p>
           {orchestration.recommendations.length > 0 && (
             <div className="mt-4">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                Try this
-              </p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Try this</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {orchestration.recommendations.map((recommendation, index) => (
                   <li key={index} className="list-disc pl-4">

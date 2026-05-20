@@ -32,12 +32,12 @@ export interface CreateJournalPayload {
 }
 
 export async function getJournalEntries() {
-  const { data } = await api.get<JournalEntry[]>('/journal/entries');
+  const { data } = await api.get<JournalEntry[]>("/journal/entries");
   return data;
 }
 
 export async function createJournalEntry(payload: CreateJournalPayload) {
-  const { data } = await api.post<JournalEntryResponse>('/journal/entries', payload);
+  const { data } = await api.post<JournalEntryResponse>("/journal/entries", payload);
   return data;
 }
 

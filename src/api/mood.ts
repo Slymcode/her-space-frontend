@@ -27,6 +27,13 @@ export interface MoodEntryResponse {
   orchestration?: OrchestrationResult | null;
 }
 
+export interface MoodStats {
+  totalEntries: number;
+  averageIntensity: number;
+  moodCounts: Record<string, number>;
+  entries: MoodEntry[];
+}
+
 export interface CreateMoodPayload {
   mood: string;
   score: number;
@@ -34,14 +41,14 @@ export interface CreateMoodPayload {
 }
 
 export async function getMoodEntries(limit: number = 30) {
-  const { data } = await api.get<MoodEntry[]>('/mood/entries', {
+  const { data } = await api.get<MoodEntry[]>("/mood/entries", {
     params: { limit },
   });
   return data;
 }
 
 export async function createMoodEntry(payload: CreateMoodPayload) {
-  const { data } = await api.post<MoodEntryResponse>('/mood/entries', payload);
+  const { data } = await api.post<MoodEntryResponse>("/mood/entries", payload);
   return data;
 }
 
@@ -50,7 +57,7 @@ export async function deleteMoodEntry(id: string) {
 }
 
 export async function getMoodStats(days: number = 7) {
-  const { data } = await api.get(`/mood/stats`, { params: { days } });
+  const { data } = await api.get<MoodStats>(`/mood/stats`, { params: { days } });
   return data;
 }
 

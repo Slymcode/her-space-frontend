@@ -82,9 +82,7 @@ function MoodPage() {
             key={m.key}
             onClick={() => setPicked(m.key)}
             className={`flex flex-col items-center gap-1 rounded-2xl border p-3 text-xs transition ${
-              picked === m.key
-                ? "border-primary bg-primary/10"
-                : "border-border bg-card"
+              picked === m.key ? "border-primary bg-primary/10" : "border-border bg-card"
             }`}
           >
             <span className="text-2xl">{m.emoji}</span>
@@ -115,9 +113,7 @@ function MoodPage() {
           <p className="mt-3 text-sm leading-relaxed">{orchestration.aiResponse}</p>
           {orchestration.recommendations.length > 0 && (
             <div className="mt-4">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                Try this
-              </p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Try this</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {orchestration.recommendations.map((recommendation, index) => (
                   <li key={index} className="list-disc pl-4">
