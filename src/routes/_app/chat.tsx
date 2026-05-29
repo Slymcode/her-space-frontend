@@ -63,7 +63,7 @@ function ChatPage() {
           <Heart className="h-5 w-5" fill="currentColor" />
         </div>
         <div>
-          <p className="font-semibold">HerMind</p>
+          <p className="font-semibold">HerSpace</p>
           <p className="text-xs text-muted-foreground">Always here to listen</p>
         </div>
       </header>
@@ -72,7 +72,7 @@ function ChatPage() {
         {messages.length === 0 && (
           <div className="mt-8 rounded-3xl bg-secondary/60 p-5 text-center">
             <p className="text-sm leading-relaxed text-secondary-foreground">
-              Hi 💛 I'm HerMind. Tell me how your day has been, or whatever is on your heart.
+              Hi 💛 I'm HerSpace. Tell me how your day has been, or whatever is on your heart.
               Whatever you say stays between us.
             </p>
           </div>
@@ -83,7 +83,7 @@ function ChatPage() {
           ))}
           {pending && (
             <div className="flex items-center gap-2 px-2 text-sm text-muted-foreground">
-              <Loader2 className="h-3 w-3 animate-spin" /> HerMind is thinking…
+              <Loader2 className="h-3 w-3 animate-spin" /> HerSpace is thinking…
             </div>
           )}
         </div>
@@ -112,7 +112,11 @@ function ChatPage() {
               size="icon"
               className="h-10 w-10 flex-none rounded-2xl"
             >
-              {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {pending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </div>

@@ -16,5 +16,8 @@ export default defineConfig({
     server: {
       allowedHosts: ["her-space-a6im.onrender.com"],
     },
+    preview: {
+      historyApiFallback: true,
+    },
   },
 });

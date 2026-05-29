@@ -6,6 +6,15 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { Plus, Trash2, X } from "lucide-react";
@@ -18,6 +27,7 @@ function JournalPage() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [responseOpen, setResponseOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [orchestration, setOrchestration] = useState<OrchestrationResult | null>(null);
@@ -40,20 +50,13 @@ function JournalPage() {
       });
     },
     onSuccess: (data) => {
-      toast.success(
-        data?.orchestration?.aiResponse ? (
-          <div className="space-y-1">
-            <p>Saved to your journal</p>
-            <p className="text-sm leading-snug">{data.orchestration.aiResponse}</p>
-          </div>
-        ) : (
-          "Saved to your journal"
-        ),
-      );
-      setOpen(false);
+      toast.success("Saved to your journal");
       setTitle("");
       setContent("");
       setOrchestration(data?.orchestration ?? null);
+      if (data?.orchestration?.aiResponse) {
+        setResponseOpen(true);
+      }
       qc.invalidateQueries({ queryKey: ["journal", user?.id] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
@@ -85,24 +88,24 @@ function JournalPage() {
         </Button>
       </div>
 
-      {orchestration && (
-        <div className="mt-6 rounded-2xl border border-border bg-card p-4">
-          <p className="text-sm font-semibold">HerMind response</p>
-          <p className="mt-3 text-sm leading-relaxed">{orchestration.aiResponse}</p>
-          {orchestration.recommendations.length > 0 && (
-            <div className="mt-4">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Try this</p>
-              <ul className="mt-2 space-y-2 text-sm">
-                {orchestration.recommendations.map((recommendation, index) => (
-                  <li key={index} className="list-disc pl-4">
-                    {recommendation}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
+      <Dialog open={responseOpen} onOpenChange={setResponseOpen}>
+        <DialogContent className="max-w-lg border border-emerald-200 bg-emerald-50 shadow-lg">
+          <DialogHeader className="p-0">
+            <DialogTitle className="text-emerald-950">AI Journal Response</DialogTitle>
+            <DialogDescription className="text-emerald-700">
+              Your journal entry was saved successfully.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 rounded-lg p-4 text-sm text-emerald-900 shadow-sm">
+            <p className="whitespace-pre-wrap">{orchestration?.aiResponse}</p>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button className="bg-emerald-600 text-white hover:bg-emerald-700">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="mt-6 space-y-3">
         {entries.length === 0 && (

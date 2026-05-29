@@ -35,9 +35,9 @@ function ProfilePage() {
       </div>
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-4">
-        <p className="text-sm font-semibold">About HerMind</p>
+        <p className="text-sm font-semibold">About HerSpace</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-          HerMind offers warm emotional support — it is not a therapist or doctor. If something
+          HerSpace offers warm emotional support — it is not a therapist or doctor. If something
           feels urgent or unsafe, please reach a trusted adult or a helpline from the Help tab.
         </p>
       </div>

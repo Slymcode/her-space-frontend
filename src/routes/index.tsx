@@ -23,7 +23,7 @@ function Landing() {
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft">
             <Heart className="h-5 w-5" fill="currentColor" />
           </div>
-          <span className="text-lg font-semibold">HerMind</span>
+          <span className="text-lg font-semibold">HerSpace</span>
         </header>
 
         <main className="mt-12 flex-1">
@@ -31,7 +31,7 @@ function Landing() {
             A safe space for <span className="text-primary">your feelings</span>.
           </h1>
           <p className="mt-4 text-base text-muted-foreground">
-            HerMind is a warm, gentle companion for African girls 10–19. Talk, journal, track your
+            HerSpace is a warm, gentle companion for African girls 10–19. Talk, journal, track your
             mood, and find support — anytime, judgment-free.
           </p>
 
@@ -66,7 +66,7 @@ function Landing() {
             </Link>
           </Button>
           <p className="pt-2 text-center text-xs text-muted-foreground">
-            HerMind is emotional support, not a medical service.
+            HerSpace is emotional support, not a medical service.
           </p>
         </footer>
       </div>

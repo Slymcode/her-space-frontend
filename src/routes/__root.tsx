@@ -33,29 +33,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "HerMind AI — A safe space for your feelings" },
+      { title: "HerSpace AI — A safe space for your feelings" },
       {
         name: "description",
         content:
-          "HerMind AI is a warm, culturally aware emotional support companion for African girls aged 10–19.",
+          "HerSpace AI is a warm, culturally aware emotional support companion for African girls aged 10–19.",
       },
       { name: "theme-color", content: "#f5d6c0" },
-      { property: "og:title", content: "HerMind AI — A safe space for your feelings" },
-      { name: "twitter:title", content: "HerMind AI — A safe space for your feelings" },
+      { property: "og:title", content: "HerSpace AI — A safe space for your feelings" },
+      { name: "twitter:title", content: "HerSpace AI — A safe space for your feelings" },
       {
         name: "description",
         content:
-          "HerMind Companion is a hybrid AI and rule-based mobile app providing culturally aware mental wellness support for African girls aged 10-19.",
+          "HerSpace Companion is a hybrid AI and rule-based mobile app providing culturally aware mental wellness support for African girls aged 10-19.",
       },
       {
         property: "og:description",
         content:
-          "HerMind Companion is a hybrid AI and rule-based mobile app providing culturally aware mental wellness support for African girls aged 10-19.",
+          "HerSpace Companion is a hybrid AI and rule-based mobile app providing culturally aware mental wellness support for African girls aged 10-19.",
       },
       {
         name: "twitter:description",
         content:
-          "HerMind Companion is a hybrid AI and rule-based mobile app providing culturally aware mental wellness support for African girls aged 10-19.",
+          "HerSpace Companion is a hybrid AI and rule-based mobile app providing culturally aware mental wellness support for African girls aged 10-19.",
       },
       {
         property: "og:image",

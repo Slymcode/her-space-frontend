@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import { emergencyApi } from "@/api/emergency";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
@@ -23,8 +25,11 @@ function EmergencyPage() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState<string | undefined>(undefined);
   const [relation, setRelation] = useState("");
+
+  const isPhoneValid = Boolean(phone && isValidPhoneNumber(phone));
+  const canAddContact = name.trim().length > 0 && isPhoneValid;
 
   const { data: contacts = [] } = useQuery({
     queryKey: ["contacts", user?.id],
@@ -36,10 +41,11 @@ function EmergencyPage() {
 
   const add = useMutation({
     mutationFn: async () => {
-      if (!user || !name.trim() || !phone.trim()) throw new Error("Name and phone required");
+      if (!user || !name.trim() || !phone) throw new Error("Name and phone required");
+      if (!isValidPhoneNumber(phone)) throw new Error("Enter a valid phone number");
       await emergencyApi.addEmergencyContact({
         name: name.trim(),
-        phone: phone.trim(),
+        phone,
         relation: relation.trim() || undefined,
       });
     },
@@ -48,7 +54,7 @@ function EmergencyPage() {
       setName("");
       setPhone("");
       setRelation("");
-      qc.invalidateQueries({ queryKey: ["contacts"] });
+      qc.invalidateQueries({ queryKey: ["contacts", user?.id] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
@@ -57,7 +63,7 @@ function EmergencyPage() {
     mutationFn: async (id: string) => {
       await emergencyApi.deleteEmergencyContact(id);
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["contacts"] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["contacts", user?.id] }),
   });
 
   return (
@@ -100,9 +106,7 @@ function EmergencyPage() {
           >
             <div className="flex-1">
               <p className="text-sm font-semibold">{c.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {c.relation || "Trusted contact"}
-              </p>
+              <p className="text-xs text-muted-foreground">{c.relation || "Trusted contact"}</p>
             </div>
             <a href={`tel:${c.phone}`} className="text-sm font-medium text-primary">
               Call
@@ -119,15 +123,36 @@ function EmergencyPage() {
 
       <div className="mt-4 space-y-2 rounded-2xl border border-dashed border-border p-4">
         <p className="text-sm font-medium">Add someone you trust</p>
-        <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="rounded-xl" />
-        <Input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="rounded-xl" />
+        <Input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="rounded-xl"
+        />
+        <div className="rounded-xl border border-input bg-background px-3 py-2">
+          <PhoneInput
+            international
+            defaultCountry="NG"
+            value={phone}
+            onChange={setPhone}
+            className="w-full bg-transparent text-sm outline-none"
+            placeholder="Enter phone number"
+          />
+        </div>
+        {!isPhoneValid && phone ? (
+          <p className="text-xs text-destructive">Enter a valid international phone number.</p>
+        ) : null}
         <Input
           placeholder="Relation (e.g. mum, aunt, teacher)"
           value={relation}
           onChange={(e) => setRelation(e.target.value)}
           className="rounded-xl"
         />
-        <Button onClick={() => add.mutate()} disabled={add.isPending} className="w-full rounded-full">
+        <Button
+          onClick={() => add.mutate()}
+          disabled={add.isPending || !canAddContact}
+          className="w-full rounded-full"
+        >
           <Plus className="mr-1 h-4 w-4" /> Add contact
         </Button>
       </div>

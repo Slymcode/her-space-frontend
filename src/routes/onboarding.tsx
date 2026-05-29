@@ -38,7 +38,17 @@ const TRIGGERS = [
   { id: "abuse", label: "Unsafe situations" },
 ];
 
-const COUNTRIES = ["Nigeria", "Kenya", "Ghana", "South Africa", "Uganda", "Tanzania", "Rwanda", "Ethiopia", "Other"];
+const COUNTRIES = [
+  "Nigeria",
+  "Kenya",
+  "Ghana",
+  "South Africa",
+  "Uganda",
+  "Tanzania",
+  "Rwanda",
+  "Ethiopia",
+  "Other",
+];
 
 function OnboardingPage() {
   const { user, loading: authLoading } = useAuth();
@@ -118,7 +128,7 @@ function OnboardingPage() {
         stressTriggers: triggers,
         onboarded: true,
       });
-      toast.success("Welcome to HerMind 💛");
+      toast.success("Welcome to HerSpace 💛");
       navigate({ to: "/home" });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Couldn't save your info");
@@ -142,8 +152,10 @@ function OnboardingPage() {
           <Heart className="h-5 w-5" fill="currentColor" />
         </div>
         <div className="flex-1">
-          <p className="font-semibold">HerMind</p>
-          <p className="text-xs text-muted-foreground">Step {step + 1} of {steps.length}</p>
+          <p className="font-semibold">HerSpace</p>
+          <p className="text-xs text-muted-foreground">
+            Step {step + 1} of {steps.length}
+          </p>
         </div>
       </header>
 
@@ -213,7 +225,9 @@ function OnboardingPage() {
                 >
                   <option value="">Select your country</option>
                   {COUNTRIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -293,8 +307,8 @@ function OnboardingPage() {
                 <p className="font-medium">Hi {name || "friend"} 💛</p>
               </div>
               <p className="text-sm leading-relaxed text-secondary-foreground">
-                Whatever you share with HerMind stays private. I'm here whenever you want
-                to talk, write in your journal, or check in with how you're feeling.
+                Whatever you share with HerSpace stays private. I'm here whenever you want to talk,
+                write in your journal, or check in with how you're feeling.
               </p>
               <p className="text-sm leading-relaxed text-secondary-foreground">
                 If something ever feels too heavy, the <span className="font-semibold">Help</span>{" "}
@@ -336,7 +350,7 @@ function OnboardingPage() {
               disabled={saving}
               className="h-11 flex-1 rounded-2xl"
             >
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start using HerMind"}
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start using HerSpace"}
             </Button>
           )}
         </div>

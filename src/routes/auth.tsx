@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 import { z } from "zod";
 import { authApi } from "@/api/auth";
 import { useAuth } from "@/lib/auth-context";
@@ -13,6 +14,49 @@ const searchSchema = z.object({
   mode: z.enum(["login", "signup"]).catch("signup"),
 });
 
+const COUNTRIES = [
+  "Nigeria",
+  "Kenya",
+  "Ghana",
+  "South Africa",
+  "Uganda",
+  "Tanzania",
+  "Rwanda",
+  "Ethiopia",
+  "Senegal",
+  "Cameroon",
+  "Zimbabwe",
+  "Zambia",
+  "Mozambique",
+  "Malawi",
+  "Sierra Leone",
+  "Botswana",
+  "Namibia",
+  "Ivory Coast",
+  "Burkina Faso",
+  "Sudan",
+  "Algeria",
+  "Morocco",
+  "Egypt",
+  "Tunisia",
+  "Libya",
+  "Mali",
+  "Benin",
+  "Mauritius",
+  "Madagascar",
+];
+
+const LANGUAGES = [
+  { value: "en", label: "English" },
+  { value: "sw", label: "Kiswahili" },
+  { value: "fr", label: "Français" },
+  { value: "pt", label: "Português" },
+  { value: "ar", label: "العربية" },
+  { value: "ha", label: "Hausa" },
+  { value: "yo", label: "Yorùbá" },
+  { value: "am", label: "Amharic" },
+];
+
 export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   component: AuthPage,
@@ -25,7 +69,9 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState("19");
+  const [country, setCountry] = useState("Nigeria");
+  const [language, setLanguage] = useState("en");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -34,6 +80,26 @@ function AuthPage() {
 
   const isSignup = mode === "signup";
 
+  function getAuthErrorMessage(error: unknown) {
+    if (error instanceof AxiosError) {
+      const response = error.response?.data as
+        | { message?: string | string[]; error?: string }
+        | undefined;
+      if (response?.message) {
+        return Array.isArray(response.message) ? response.message.join(" ") : response.message;
+      }
+      if (response?.error) {
+        return response.error;
+      }
+      if (error.response?.status === 401) {
+        return "Invalid email or password.";
+      }
+      return error.message;
+    }
+
+    return error instanceof Error ? error.message : "Something went wrong";
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -41,7 +107,15 @@ function AuthPage() {
       if (isSignup) {
         const ageNum = parseInt(age, 10);
         if (!ageNum || ageNum < 10 || ageNum > 19) {
-          toast.error("HerMind is for girls aged 10–19.");
+          toast.error("HerSpace is for girls aged 10–19.");
+          return;
+        }
+        if (!country) {
+          toast.error("Please choose your country.");
+          return;
+        }
+        if (!language) {
+          toast.error("Please choose your preferred language.");
           return;
         }
         if (password.length < 6) {
@@ -54,10 +128,12 @@ function AuthPage() {
           password,
           fullName: name,
           age: ageNum,
+          country,
+          preferredLanguage: language,
         });
 
         await signIn(data.accessToken, data.user);
-        toast.success("Welcome to HerMind! 💛");
+        toast.success("Welcome to HerSpace! 💛");
         navigate({ to: "/home" });
       } else {
         const data = await authApi.login({ email, password });
@@ -66,8 +142,7 @@ function AuthPage() {
         navigate({ to: "/home" });
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Something went wrong";
-      toast.error(msg);
+      toast.error(getAuthErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -83,7 +158,7 @@ function AuthPage() {
           <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
             <Heart className="h-4 w-4" fill="currentColor" />
           </div>
-          <span className="font-semibold">HerMind</span>
+          <span className="font-semibold">HerSpace</span>
         </button>
 
         <div className="mt-10">
@@ -108,18 +183,63 @@ function AuthPage() {
                   className="mt-1.5 rounded-xl"
                 />
               </div>
-              <div>
-                <Label htmlFor="age">Your age (10–19)</Label>
-                <Input
-                  id="age"
-                  type="number"
-                  min={10}
-                  max={19}
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  required
-                  className="mt-1.5 rounded-xl"
-                />
+              <div className="grid gap-4">
+                <div>
+                  <Label htmlFor="age">Your age</Label>
+                  <select
+                    id="age"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    required
+                    className="mt-1.5 h-12 w-full rounded-xl border border-input bg-background px-3 text-sm"
+                  >
+                    <option value="">Select your age</option>
+                    {Array.from({ length: 10 }, (_, index) => {
+                      const value = 10 + index;
+                      return (
+                        <option key={value} value={String(value)}>
+                          {value}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <div>
+                  <Label htmlFor="country">Country</Label>
+                  <select
+                    id="country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    required
+                    className="mt-1.5 h-12 w-full rounded-xl border border-input bg-background px-3 text-sm"
+                  >
+                    <option value="">Select your country</option>
+                    {COUNTRIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <Label htmlFor="language">Preferred language</Label>
+                  <select
+                    id="language"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    required
+                    className="mt-1.5 h-12 w-full rounded-xl border border-input bg-background px-3 text-sm"
+                  >
+                    <option value="">Select your language</option>
+                    {LANGUAGES.map((lang) => (
+                      <option key={lang.value} value={lang.value}>
+                        {lang.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </>
           )}

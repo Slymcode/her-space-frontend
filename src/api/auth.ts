@@ -27,6 +27,8 @@ export interface RegisterPayload {
   password: string;
   fullName: string;
   age: number;
+  country: string;
+  preferredLanguage: string;
 }
 
 export interface LoginPayload {

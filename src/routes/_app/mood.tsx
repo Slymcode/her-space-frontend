@@ -5,6 +5,15 @@ import { moodApi, OrchestrationResult } from "@/api/mood";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -29,6 +38,7 @@ function MoodPage() {
   const [picked, setPicked] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const [orchestration, setOrchestration] = useState<OrchestrationResult | null>(null);
+  const [responseOpen, setResponseOpen] = useState(false);
 
   const { data: logs = [] } = useQuery({
     queryKey: ["moods", user?.id],
@@ -50,19 +60,13 @@ function MoodPage() {
       });
     },
     onSuccess: (data) => {
-      toast.success(
-        data?.orchestration?.aiResponse ? (
-          <div className="space-y-1">
-            <p>Saved 💛</p>
-            <p className="text-sm leading-snug">{data.orchestration.aiResponse}</p>
-          </div>
-        ) : (
-          "Saved 💛"
-        ),
-      );
+      toast.success("Saved 💛");
       setPicked(null);
       setNote("");
       setOrchestration(data?.orchestration ?? null);
+      if (data?.orchestration?.aiResponse) {
+        setResponseOpen(true);
+      }
       qc.invalidateQueries({ queryKey: ["moods", user?.id] });
       qc.invalidateQueries({ queryKey: ["mood-latest", user?.id] });
     },
@@ -107,24 +111,21 @@ function MoodPage() {
         Save mood
       </Button>
 
-      {orchestration && (
-        <div className="mt-6 rounded-2xl border border-border bg-card p-4">
-          <p className="text-sm font-semibold">HerMind response</p>
-          <p className="mt-3 text-sm leading-relaxed">{orchestration.aiResponse}</p>
-          {orchestration.recommendations.length > 0 && (
-            <div className="mt-4">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Try this</p>
-              <ul className="mt-2 space-y-2 text-sm">
-                {orchestration.recommendations.map((recommendation, index) => (
-                  <li key={index} className="list-disc pl-4">
-                    {recommendation}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
+      <Dialog open={responseOpen} onOpenChange={setResponseOpen}>
+        <DialogContent className="max-w-lg border border-emerald-200 bg-emerald-50 shadow-lg">
+          <DialogHeader className="p-0">
+            <DialogTitle className="text-emerald-950">HerSpace Mood Response</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4 rounded-lg p-4 text-sm text-emerald-900 shadow-sm">
+            <p className="whitespace-pre-wrap">{orchestration?.aiResponse}</p>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button className="bg-emerald-600 text-white hover:bg-emerald-700">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <h2 className="mt-8 text-lg font-semibold">Recent</h2>
       <div className="mt-3 space-y-2">

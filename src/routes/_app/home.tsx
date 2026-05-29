@@ -36,7 +36,8 @@ function HomePage() {
   });
 
   const greeting = greetingForHour();
-  const name = profile?.fullName?.split(" ")[0] || "friend";
+  const name =
+    profile?.fullName?.split(" ")[0] || user?.profile?.fullName?.split(" ")[0] || "friend";
 
   return (
     <div className="px-5 pt-10">
@@ -56,7 +57,7 @@ function HomePage() {
       <Link to="/chat" className="mt-7 block rounded-3xl bg-gradient-warm p-5 shadow-soft">
         <div className="flex items-center gap-2 text-warm-foreground">
           <Sparkles className="h-4 w-4" />
-          <span className="text-xs font-semibold uppercase tracking-wide">HerMind chat</span>
+          <span className="text-xs font-semibold uppercase tracking-wide">HerSpace chat</span>
         </div>
         <p className="mt-2 text-lg font-semibold leading-snug text-warm-foreground">
           How are you really feeling today?
@@ -91,7 +92,7 @@ function HomePage() {
         <QuickCard
           to="/chat"
           icon={<MessageCircle className="h-5 w-5" />}
-          title="Talk to HerMind"
+          title="Talk to HerSpace"
           subtitle="Anytime"
           tone="primary"
         />
