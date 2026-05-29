@@ -91,7 +91,7 @@ function JournalPage() {
       <Dialog open={responseOpen} onOpenChange={setResponseOpen}>
         <DialogContent className="max-w-lg border border-emerald-200 bg-emerald-50 shadow-lg">
           <DialogHeader className="p-0">
-            <DialogTitle className="text-emerald-950">AI Journal Response</DialogTitle>
+            <DialogTitle className="text-emerald-950">HerSpace Journal Response</DialogTitle>
             <DialogDescription className="text-emerald-700">
               Your journal entry was saved successfully.
             </DialogDescription>
