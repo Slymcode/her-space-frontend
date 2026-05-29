@@ -92,9 +92,6 @@ function JournalPage() {
         <DialogContent className="max-w-lg border border-emerald-200 bg-emerald-50 shadow-lg">
           <DialogHeader className="p-0">
             <DialogTitle className="text-emerald-950">HerSpace Journal Response</DialogTitle>
-            <DialogDescription className="text-emerald-700">
-              Your journal entry was saved successfully.
-            </DialogDescription>
           </DialogHeader>
           <div className="mt-4 rounded-lg p-4 text-sm text-emerald-900 shadow-sm">
             <p className="whitespace-pre-wrap">{orchestration?.aiResponse}</p>
