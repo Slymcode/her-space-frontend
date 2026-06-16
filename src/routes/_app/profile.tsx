@@ -28,9 +28,7 @@ function ProfilePage() {
           {(profile?.firstName || "💛")?.[0]?.toUpperCase()}
         </div>
         <div>
-          <p className="font-semibold">
-            {profile?.firstName || "You"}
-          </p>
+          <p className="font-semibold">{profile?.firstName || "You"}</p>
           <p className="text-sm text-muted-foreground">{user?.email}</p>
           {profile?.age && <p className="text-xs text-muted-foreground">Age {profile.age}</p>}
         </div>

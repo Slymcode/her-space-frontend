@@ -111,47 +111,47 @@ function AuthPage() {
           toast.error("HerSpace is for girls aged 10–19.");
           return;
         }
-          if (!firstName.trim()) {
-            toast.error("Please enter your first name.");
-            return;
-          }
-          if (!lastName.trim()) {
-            toast.error("Please enter your last name.");
-            return;
-          }
-          if (!country) {
-            toast.error("Please choose your country.");
-            return;
-          }
-          if (!language) {
-            toast.error("Please choose your preferred language.");
-            return;
-          }
-          if (password.length < 6) {
-            toast.error("Password must be at least 6 characters.");
-            return;
-          }
-
-          const data = await authApi.register({
-            email,
-            password,
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            age: ageNum,
-            country,
-            preferredLanguage: language,
-          });
-
-          await signIn(data.accessToken, data.user);
-          toast.success("Welcome to HerSpace! 💛");
-          navigate({ to: "/home" });
-        } else {
-          const data = await authApi.login({ email, password });
-          await signIn(data.accessToken, data.user);
-          toast.success("Welcome back!");
-          navigate({ to: "/home" });
+        if (!firstName.trim()) {
+          toast.error("Please enter your first name.");
+          return;
         }
-      } catch (err) {
+        if (!lastName.trim()) {
+          toast.error("Please enter your last name.");
+          return;
+        }
+        if (!country) {
+          toast.error("Please choose your country.");
+          return;
+        }
+        if (!language) {
+          toast.error("Please choose your preferred language.");
+          return;
+        }
+        if (password.length < 6) {
+          toast.error("Password must be at least 6 characters.");
+          return;
+        }
+
+        const data = await authApi.register({
+          email,
+          password,
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          age: ageNum,
+          country,
+          preferredLanguage: language,
+        });
+
+        await signIn(data.accessToken, data.user);
+        toast.success("Welcome to HerSpace! 💛");
+        navigate({ to: "/home" });
+      } else {
+        const data = await authApi.login({ email, password });
+        await signIn(data.accessToken, data.user);
+        toast.success("Welcome back!");
+        navigate({ to: "/home" });
+      }
+    } catch (err) {
       toast.error(getAuthErrorMessage(err));
     } finally {
       setLoading(false);
