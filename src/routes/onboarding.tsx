@@ -83,7 +83,7 @@ function OnboardingPage() {
         navigate({ to: "/home" });
         return;
       }
-      setName(profile.full_name || "");
+      setName(profile.firstName || "");
       setAge(profile.age ? String(profile.age) : "");
       setPronouns(profile.pronouns || "she/her");
       setCountry(profile.country || "");
@@ -119,7 +119,7 @@ function OnboardingPage() {
     setSaving(true);
     try {
       await userApi.updateProfile({
-        fullName: name.trim(),
+        firstName: name.trim(),
         age: parseInt(age, 10),
         pronouns,
         country,

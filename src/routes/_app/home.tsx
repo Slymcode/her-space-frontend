@@ -36,8 +36,7 @@ function HomePage() {
   });
 
   const greeting = greetingForHour();
-  const name =
-    profile?.fullName?.split(" ")[0] || user?.profile?.fullName?.split(" ")[0] || "friend";
+  const name = profile?.firstName || user?.profile?.firstName || "friend";
 
   return (
     <div className="px-5 pt-10">

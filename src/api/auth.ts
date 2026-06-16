@@ -1,7 +1,8 @@
 import { api } from "./axios";
 
 export interface AuthProfile {
-  fullName?: string;
+  firstName?: string;
+  lastName?: string;
   age?: number;
   country?: string;
   preferredLanguage?: string;
@@ -25,7 +26,8 @@ export interface AuthResponse {
 export interface RegisterPayload {
   email: string;
   password: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   age: number;
   country: string;
   preferredLanguage: string;

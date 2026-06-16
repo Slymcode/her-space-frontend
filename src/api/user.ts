@@ -1,7 +1,8 @@
 import { api } from "./axios";
 
 export type Profile = {
-  fullName?: string;
+  firstName?: string;
+  lastName?: string;
   age?: number;
   pronouns?: string;
   country?: string;

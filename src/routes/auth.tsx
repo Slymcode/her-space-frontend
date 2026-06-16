@@ -68,7 +68,8 @@ function AuthPage() {
   const { user, loading: authLoading, signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [age, setAge] = useState("19");
   const [country, setCountry] = useState("Nigeria");
   const [language, setLanguage] = useState("en");
@@ -110,38 +111,47 @@ function AuthPage() {
           toast.error("HerSpace is for girls aged 10–19.");
           return;
         }
-        if (!country) {
-          toast.error("Please choose your country.");
-          return;
-        }
-        if (!language) {
-          toast.error("Please choose your preferred language.");
-          return;
-        }
-        if (password.length < 6) {
-          toast.error("Password must be at least 6 characters.");
-          return;
-        }
+          if (!firstName.trim()) {
+            toast.error("Please enter your first name.");
+            return;
+          }
+          if (!lastName.trim()) {
+            toast.error("Please enter your last name.");
+            return;
+          }
+          if (!country) {
+            toast.error("Please choose your country.");
+            return;
+          }
+          if (!language) {
+            toast.error("Please choose your preferred language.");
+            return;
+          }
+          if (password.length < 6) {
+            toast.error("Password must be at least 6 characters.");
+            return;
+          }
 
-        const data = await authApi.register({
-          email,
-          password,
-          fullName: name,
-          age: ageNum,
-          country,
-          preferredLanguage: language,
-        });
+          const data = await authApi.register({
+            email,
+            password,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            age: ageNum,
+            country,
+            preferredLanguage: language,
+          });
 
-        await signIn(data.accessToken, data.user);
-        toast.success("Welcome to HerSpace! 💛");
-        navigate({ to: "/home" });
-      } else {
-        const data = await authApi.login({ email, password });
-        await signIn(data.accessToken, data.user);
-        toast.success("Welcome back!");
-        navigate({ to: "/home" });
-      }
-    } catch (err) {
+          await signIn(data.accessToken, data.user);
+          toast.success("Welcome to HerSpace! 💛");
+          navigate({ to: "/home" });
+        } else {
+          const data = await authApi.login({ email, password });
+          await signIn(data.accessToken, data.user);
+          toast.success("Welcome back!");
+          navigate({ to: "/home" });
+        }
+      } catch (err) {
       toast.error(getAuthErrorMessage(err));
     } finally {
       setLoading(false);
@@ -173,15 +183,27 @@ function AuthPage() {
         <form onSubmit={submit} className="mt-8 space-y-4">
           {isSignup && (
             <>
-              <div>
-                <Label htmlFor="name">First name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  className="mt-1.5 rounded-xl"
-                />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="firstName">First name</Label>
+                  <Input
+                    id="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                    className="mt-1.5 rounded-xl"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lastName">Last name</Label>
+                  <Input
+                    id="lastName"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                    className="mt-1.5 rounded-xl"
+                  />
+                </div>
               </div>
               <div className="grid gap-4">
                 <div>

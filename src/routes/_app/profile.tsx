@@ -25,10 +25,12 @@ function ProfilePage() {
 
       <div className="mt-6 flex items-center gap-4 rounded-2xl border border-border bg-card p-4">
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground">
-          {profile?.full_name?.[0]?.toUpperCase() || "💛"}
+          {(profile?.firstName || "💛")?.[0]?.toUpperCase()}
         </div>
         <div>
-          <p className="font-semibold">{profile?.full_name || "You"}</p>
+          <p className="font-semibold">
+            {profile?.firstName || "You"}
+          </p>
           <p className="text-sm text-muted-foreground">{user?.email}</p>
           {profile?.age && <p className="text-xs text-muted-foreground">Age {profile.age}</p>}
         </div>

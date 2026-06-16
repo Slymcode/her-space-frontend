@@ -319,7 +319,8 @@ curl -X POST http://localhost:3000/auth/register \
   -d '{
     "email": "user@example.com",
     "password": "password123",
-    "fullName": "John Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "age": 25
   }'
 
